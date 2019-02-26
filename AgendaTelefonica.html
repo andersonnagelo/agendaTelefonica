@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Agenda Telefônica</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+        crossorigin="anonymous">
+</head>
+
+<body>
+    <div id="app">
+        <div class="nav-agenda">
+                <h1>{{ message }}</h1>
+                <img src="imagens/icone-telefone.png">
+        </div>
+       
+        <form>
+                <div class="form-group col-7" id="formulario-contato">
+                        <label for="Nome">Nome:</label>
+                        <input  v-model="contato.nome" type="nome" class="form-control" id="nome">
+
+                        <label for="Email">Email:</label>
+                        <input v-model="contato.email" type="email" class="form-control" id="email" placeholder="nome@examplo.com">
+
+                        <label for="Telefone">Telefone:</label>
+                        <input v-model="contato.telefone" type="tel" class="form-control" id="telefone" maxlength="14" placeholder="(00) 00000-0000"  >
+            
+                        <button class="btn btn-info" @click="adicionarContato()" id="btn-adicionar">Adicionar Contato</button>
+                    </div>
+                    </form>
+        </form>
+
+        <table class="table">
+            <h1 class="lista">Lista de Contatos</h1>
+                <thead>
+               <tr>
+                 <th scope="col">ID
+                 </th>
+                 <th scope="col">Nome</th>
+                 <th scope="col">Telefone</th>
+                 <th scope="col">Ação</th>
+               </tr>
+                </thead>
+                <tbody>
+               <tr v-for="item in listaContatos">
+                <th scope="row">{{ item.id }}</th>
+                <td>{{ item.nome }}</td>
+                <td>{{ item.telefone }}</td>
+                <td>
+                 <button @click="editarContato(item)" class="btn btn-info">Editar</button>
+                 <button @click="removerContato(item)" class="btn btn-danger">Excluir</button>
+                </td>
+               </tr>
+                </tbody>
+              </table>
+        
+    </div>
+    < src="https://cdn.jsdelivr.net/npm/vue"></>
+    <>
+        var app = new Vue({
+            el: '#app',
+            data: {
+                message: 'Agenda Telefônica',
+                contato: {
+                    id: 0,
+                    nome: null,
+                    email: null,
+                    telefone: null
+                },
+                index: null,
+                listaContatos: []
+            },
+
+            mounted() {
+                const contatos = JSON.parse(localStorage.getItem('contatos'))
+                this.listaContatos = contatos ? contatos : []
+            },
+
+            methods: {
+                adicionarContato() {
+                    if (this.contato.id === 0) {
+                        this.contato.id = this.listaContatos.length + 1
+                        this.listaContatos.push(this.contato)
+
+                    } else {
+                        this.listaContatos[this.index] = this.contato
+                    }
+                    localStorage.setItem('contatos', JSON.stringify(this.listaContatos))
+                    this.contato = {
+                        id: 0,
+                        nome: null,
+                        email: null,
+                        telefone: null
+                    }
+                },
+
+                removerContato(item) {
+                    const idx = this.listaContatos.indexOf(item)
+                    this.listaContatos.splice(idx, 1)
+                    localStorage.setItem('contatos', JSON.stringify(this.listaContatos))
+                },
+
+                editarContato(item) {
+                    this.index = this.listaContatos.indexOf(item)
+                    this.contato = Object.assign({}, item);
+                    localStorage.setItem('contatos', JSON.stringify(this.listaContatos))
+                }
+            }
+        })
+</>
+</body>
+</html>
+
+<style>
+    .nav-agenda {
+        text-align: center;
+        background-color: #0091B3;
+        color: white;
+        padding: 20px;
+    }
+    .nav-agenda img{
+        width: 100px;
+        height: 100px;
+    }
+    #formulario-contato{
+        padding: 50px;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        text-align: center;
+    }
+    .form-group{
+        margin-bottom: 5%;
+        padding: 10px;
+        color:#F2626E
+    }
+  #btn-adicionar{
+        margin: 10px 0px 0px 0px;
+        text-align: center;
+    }
+    .table{
+        padding: 10px;
+        text-align: center;
+        color: #F2626E; 
+    }
+    .lista{
+        padding: 20px;
+        margin: 30px;
+        text-align: center;
+        color: #0091B3; 
+    }
+
+</style>
